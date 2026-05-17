@@ -13,6 +13,36 @@ import { db } from '../firebase'
 export default function AdminPage() {
   const [teams, setTeams] = useState([])
 
+  async function endDay() {
+    for (const team of teams) {
+      const requiredFood = team.people * 2
+      const requiredWater = team.people * 2
+
+      const remainingFood = Math.max(team.food - requiredFood, 0)
+      const remainingWater = Math.max(team.water - requiredWater, 0)
+
+      const missingFood = Math.max(requiredFood - team.food, 0)
+      const missingWater = Math.max(requiredWater - team.water, 0)
+
+      const foodPenalty = Math.min(Math.ceil(missingFood / 2), 3)
+      const waterPenalty = Math.min(Math.ceil(missingWater / 2), 3)
+
+      const totalPenalty = foodPenalty + waterPenalty
+
+      const newScore = Math.max(team.score - totalPenalty, 0)
+
+      const teamRef = doc(db, 'teams', team.id)
+
+      await updateDoc(teamRef, {
+        food: remainingFood,
+        water: remainingWater,
+        score: newScore
+      })
+    }
+
+    alert('End of day processed!')
+  }
+
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'teams'), snapshot => {
       const data = snapshot.docs.map(doc => ({
@@ -60,6 +90,22 @@ export default function AdminPage() {
           Admin Panel
         </h1>
 
+        <div style={{ display: 'flex', gap: '12px' }}>
+        <button
+          onClick={endDay}
+          style={{
+            padding: '12px 20px',
+            borderRadius: '10px',
+            border: 'none',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            background: '#ef4444',
+            color: 'white'
+          }}
+        >
+          End Day
+        </button>
+
         <button
           onClick={initializeTeams}
           style={{
@@ -72,6 +118,7 @@ export default function AdminPage() {
         >
           Initialize Teams
         </button>
+      </div>
       </div>
 
       <div style={{
@@ -111,8 +158,8 @@ export default function AdminPage() {
             }}>
               <ControlRow
                 label={`Score (${team.score})`}
-                onAdd={() => updateValue(team.id, 'score', 1)}
-                onSubtract={() => updateValue(team.id, 'score', -1)}
+                onAdd={() => updateValue(team.id, 'score', 10)}
+                onSubtract={() => updateValue(team.id, 'score', -10)}
               />
 
               <ControlRow
@@ -125,6 +172,12 @@ export default function AdminPage() {
                 label={`Water (${team.water})`}
                 onAdd={() => updateValue(team.id, 'water', 1)}
                 onSubtract={() => updateValue(team.id, 'water', -1)}
+              />
+
+              <ControlRow
+                label={`People (${team.people})`}
+                onAdd={() => updateValue(team.id, 'people', 1)}
+                onSubtract={() => updateValue(team.id, 'people', -1)}
               />
 
               <ControlRow

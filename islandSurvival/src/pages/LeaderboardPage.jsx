@@ -60,7 +60,6 @@ export default function LeaderboardPage() {
         {teams.map((team, index) => {
           const totalResources =
             team.food + team.water + team.cardboard
-
           return (
             <motion.div
               key={team.id}
@@ -89,7 +88,7 @@ export default function LeaderboardPage() {
               }}>
                 <motion.div
                   animate={{
-                    y: [0, 0, 0]
+                    y: [0, -3, 0]
                   }}
                   transition={{
                     duration: 2,

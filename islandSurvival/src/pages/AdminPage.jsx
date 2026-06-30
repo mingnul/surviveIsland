@@ -215,8 +215,8 @@ export default function AdminPage() {
             }}>
               <ControlRow
                 label={`Score (${team.score})`}
-                onAdd={() => updateValue(team.id, 'score', 10)}
-                onSubtract={() => updateValue(team.id, 'score', -10)}
+                onAdd={() => updateValue(team.id, 'score', 1)}
+                onSubtract={() => updateValue(team.id, 'score', -1)}
               />
 
               <ControlRow

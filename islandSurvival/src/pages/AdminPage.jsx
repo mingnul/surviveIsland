@@ -4,7 +4,9 @@ import {
   increment,
   onSnapshot,
   setDoc,
-  updateDoc
+  getDoc,
+  updateDoc,
+  deleteDoc
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import defaultTeams from '../data/defaultTeams'
@@ -13,34 +15,84 @@ import { db } from '../firebase'
 export default function AdminPage() {
   const [teams, setTeams] = useState([])
 
+  async function addTeam() {
+    const id = crypto.randomUUID()
+
+    await setDoc(doc(db, "teams", id), {
+      name: "New Group",
+      icon: "🆕",
+      score: 100,
+      food: 0,
+      water: 0,
+      cardboard: 0,
+      people: 6
+    })
+  }
+
+  async function removeTeam(teamId) {
+    if (round > 1) {
+      alert("Cannot remove teams after game starts")
+      return
+    }
+    await deleteDoc(doc(db, "teams", teamId))
+  }
+
   async function endDay() {
+    const gameRef = doc(db, "game", "current")
+
+    const currentRoundSnap = await getDoc(gameRef)
+    const round = Number(currentRoundSnap.data()?.round ?? 1)
+
     for (const team of teams) {
-      const requiredFood = team.people * 2
-      const requiredWater = team.people * 2
+      const people = Number(team.people ?? 0)
+      const food = Number(team.food ?? 0)
+      const water = Number(team.water ?? 0)
+      const score = Number(team.score ?? 100)
+      const cardboard = Number(team.cardboard ?? 0)
 
-      const remainingFood = Math.max(team.food - requiredFood, 0)
-      const remainingWater = Math.max(team.water - requiredWater, 0)
-
-      const missingFood = Math.max(requiredFood - team.food, 0)
-      const missingWater = Math.max(requiredWater - team.water, 0)
-
+      // -------------------------
+      // FOOD RULE
+      // -------------------------
+      const requiredFood = people * 2
+      const missingFood = Math.max(requiredFood - food, 0)
       const foodPenalty = Math.min(Math.ceil(missingFood / 2), 3)
+
+      const newFood = Math.max(food - requiredFood, 0)
+
+      // -------------------------
+      // WATER RULE
+      // -------------------------
+      const requiredWater = people * 2
+      const missingWater = Math.max(requiredWater - water, 0)
       const waterPenalty = Math.min(Math.ceil(missingWater / 2), 3)
 
-      const totalPenalty = foodPenalty + waterPenalty
+      const newWater = Math.max(water - requiredWater, 0)
 
-      const newScore = Math.max(team.score - totalPenalty, 0)
+      // -------------------------
+      // CARDBOARD RULE
+      // -------------------------
+      const requiredCardboard = round * 5
+      const cardboardPenalty = cardboard < requiredCardboard ? 3 : 0
 
-      const teamRef = doc(db, 'teams', team.id)
+      // -------------------------
+      // TOTAL SCORE LOSS
+      // -------------------------
+      const totalPenalty = foodPenalty + waterPenalty + cardboardPenalty
+      const newScore = Math.max(score - totalPenalty, 0)
 
-      await updateDoc(teamRef, {
-        food: remainingFood,
-        water: remainingWater,
+      await updateDoc(doc(db, "teams", team.id), {
+        food: newFood,
+        water: newWater,
         score: newScore
       })
     }
 
-    alert('End of day processed!')
+    // move to next round
+    await updateDoc(gameRef, {
+      round: round + 1
+    })
+
+    alert("End Day complete. Next round started.")
   }
 
   useEffect(() => {
@@ -60,6 +112,10 @@ export default function AdminPage() {
     for (const team of defaultTeams) {
       await setDoc(doc(db, 'teams', team.id), team)
     }
+
+    await setDoc(doc(db, "game", "current"), {
+      round: 1
+    })
 
     alert('Teams initialized!')
   }
@@ -105,6 +161,11 @@ export default function AdminPage() {
         >
           End Day
         </button>
+
+        <button onClick={addTeam}>
+          + Add Group
+        </button>
+        
 
         <button
           onClick={initializeTeams}
@@ -185,6 +246,18 @@ export default function AdminPage() {
                 onAdd={() => updateValue(team.id, 'cardboard', 1)}
                 onSubtract={() => updateValue(team.id, 'cardboard', -1)}
               />
+              <button
+              onClick={() => removeTeam(team.id)}
+              style={{
+                background: "red",
+                color: "white",
+                padding: "6px",
+                borderRadius: "6px",
+                marginTop: "8px"
+              }}
+            >
+              Remove
+            </button>
             </div>
           </div>
         ))}

@@ -1,4 +1,5 @@
 import {
+  doc,
   collection,
   onSnapshot
 } from 'firebase/firestore'
@@ -8,6 +9,15 @@ import { db } from '../firebase'
 
 export default function LeaderboardPage() {
   const [teams, setTeams] = useState([])
+  const [round, setRound] = useState(1)
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "game", "current"), (snap) => {
+      setRound(Number(snap.data()?.round ?? 1))
+    })
+
+    return () => unsub()
+  }, [])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, 'teams'), snapshot => {
@@ -34,6 +44,7 @@ export default function LeaderboardPage() {
   }, [])
 
   return (
+    
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(to bottom right, #111827, #1f2937)',
@@ -42,6 +53,9 @@ export default function LeaderboardPage() {
       fontFamily: 'Arial',
       overflow: 'hidden'
     }}>
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+      <div style={{ fontSize: 28 }}>Round {round}</div>
+      </div>
       <h1 style={{
         textAlign: 'center',
         fontSize: '42px',

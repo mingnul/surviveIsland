@@ -105,6 +105,7 @@ export default function AdminPage() {
   }, [])
 
   async function initializeTeams() {
+    if(!confirm("Reset game?")) return
     for (const team of defaultTeams) {
       await setDoc(doc(db, 'teams', team.id), team)
     }

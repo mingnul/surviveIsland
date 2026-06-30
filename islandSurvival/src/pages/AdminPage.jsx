@@ -30,10 +30,6 @@ export default function AdminPage() {
   }
 
   async function removeTeam(teamId) {
-    if (round > 1) {
-      alert("Cannot remove teams after game starts")
-      return
-    }
     await deleteDoc(doc(db, "teams", teamId))
   }
 

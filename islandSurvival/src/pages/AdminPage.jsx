@@ -34,6 +34,7 @@ export default function AdminPage() {
   }
 
   async function endDay() {
+    if(!confirm("end day?")) return
     const gameRef = doc(db, "game", "current")
 
     const currentRoundSnap = await getDoc(gameRef)
@@ -60,7 +61,7 @@ export default function AdminPage() {
       // -------------------------
       const requiredWater = people * 2
       const missingWater = Math.max(requiredWater - water, 0)
-      const waterPenalty = Math.min(Math.ceil(missingWater / 2), 3)
+      const waterPenalty = Math.min(Math.ceil(missingWater / 2), 6)
 
       const newWater = Math.max(water - requiredWater, 0)
 
@@ -68,7 +69,7 @@ export default function AdminPage() {
       // CARDBOARD RULE
       // -------------------------
       const requiredCardboard = round * 5
-      const cardboardPenalty = cardboard < requiredCardboard ? 3 : 0
+      const cardboardPenalty = cardboard < requiredCardboard ? 6 : 0
 
       // -------------------------
       // TOTAL SCORE LOSS
@@ -88,7 +89,7 @@ export default function AdminPage() {
       round: round + 1
     })
 
-    alert("End Day complete. Next round started.")
+    
   }
 
   useEffect(() => {
@@ -159,9 +160,6 @@ export default function AdminPage() {
           End Day
         </button>
 
-        <button onClick={addTeam}>
-          + Add Group
-        </button>
         
 
         <button
@@ -243,18 +241,6 @@ export default function AdminPage() {
                 onAdd={() => updateValue(team.id, 'cardboard', 1)}
                 onSubtract={() => updateValue(team.id, 'cardboard', -1)}
               />
-              <button
-              onClick={() => removeTeam(team.id)}
-              style={{
-                background: "red",
-                color: "white",
-                padding: "6px",
-                borderRadius: "6px",
-                marginTop: "8px"
-              }}
-            >
-              Remove
-            </button>
             </div>
           </div>
         ))}

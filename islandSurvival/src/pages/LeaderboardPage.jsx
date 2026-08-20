@@ -61,7 +61,8 @@ export default function LeaderboardPage() {
         fontSize: '42px',
         marginBottom: '14px',
         fontWeight: 'bold',
-        letterSpacing: '2px'
+        letterSpacing: '2px',
+        color: 'white'
       }}>
         SURVIVAL LEADERBOARD
       </h1>
@@ -69,7 +70,7 @@ export default function LeaderboardPage() {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '10px'
+        gap: '20px'
       }}>
         {teams.map((team, index) => {
           const totalResources =
@@ -101,9 +102,9 @@ export default function LeaderboardPage() {
                 gap: '14px'
               }}>
                 <motion.div
-                  animate={{
-                    y: [0, -3, 0]
-                  }}
+                  // animate={{
+                  //   y: [0, -3, 0]
+                  // }}
                   transition={{
                     duration: 2,
                     repeat: Infinity
@@ -111,35 +112,36 @@ export default function LeaderboardPage() {
                   style={{
                     fontSize: '32px',
                     fontWeight: 'bold',
-                    width: '50px'
+                    width: '50px',
+                    color: 'pink'
                   }}
                 >
                   #{index + 1}
                 </motion.div>
 
                 <div style={{ fontSize: '36px' }}>
-                  {team.icon}
+                  {team.name}
                 </div>
 
                 <div>
-                  <div style={{
+                  {/* <div style={{
                     fontSize: '24px',
                     fontWeight: 'bold'
                   }}>
                     {team.name}
-                  </div>
+                  </div> */}
 
                   <div style={{
                     display: 'flex',
-                    gap: '12px',
-                    fontSize: '15px',
+                    gap: '1px',
+                    fontSize: '30px',
                     opacity: 0.9,
-                    marginTop: '4px'
+                    marginTop: '10px'
                   }}>
                     <div>🍎 {team.food}</div>
                     <div>💧 {team.water}</div>
                     <div>📦 {team.cardboard}</div>
-                    <div>🧰 {totalResources}</div>
+                    {/* <div>🧰 {totalResources}</div> */}
                   </div>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 const defaultTeams = [
   {
     id: 'team1',
-    name: 'Group 1',
+    name: 'M1',
     icon: '🔴',
     score: 100,
     food: 0,
@@ -11,7 +11,7 @@ const defaultTeams = [
   },
   {
     id: 'team2',
-    name: 'Group 2',
+    name: 'M2',
     icon: '🟠',
     score: 100,
     food: 0,
@@ -21,7 +21,7 @@ const defaultTeams = [
   },
   {
     id: 'team3',
-    name: 'Group 3',
+    name: 'M3',
     icon: '🟡',
     score: 100,
     food: 0,
@@ -31,7 +31,7 @@ const defaultTeams = [
   },
   {
     id: 'team4',
-    name: 'Group 4',
+    name: 'M4',
     icon: '🟢',
     score: 100,
     food: 0,
@@ -41,7 +41,7 @@ const defaultTeams = [
   },
   {
     id: 'team5',
-    name: 'Group 5',
+    name: 'M5',
     icon: '🔵',
     score: 100,
     food: 0,
@@ -51,7 +51,7 @@ const defaultTeams = [
   },
   {
     id: 'team6',
-    name: 'Group 6',
+    name: 'M6',
     icon: '🟣',
     score: 100,
     food: 0,
@@ -61,7 +61,7 @@ const defaultTeams = [
   },
   {
     id: 'team7',
-    name: 'Group 7',
+    name: 'F1',
     icon: '⚫',
     score: 100,
     food: 0,
@@ -71,7 +71,7 @@ const defaultTeams = [
   },
   {
     id: 'team8',
-    name: 'Group 8',
+    name: 'F2',
     icon: '⚪',
     score: 100,
     food: 0,
@@ -81,7 +81,7 @@ const defaultTeams = [
   },
   {
     id: 'team9',
-    name: 'Group 9',
+    name: 'F3',
     icon: '🟤',
     score: 100,
     food: 0,
@@ -90,8 +90,8 @@ const defaultTeams = [
     people: 6
   },
   {
-    id: 'team10',
-    name: 'Group 10',
+    id: 'team91',
+    name: 'F4',
     icon: '⭐',
     score: 100,
     food: 0,

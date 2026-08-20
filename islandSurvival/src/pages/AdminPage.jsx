@@ -106,24 +106,24 @@ export default function AdminPage() {
   }, [])
 
   async function initializeTeams() {
-    if(!confirm("Reset game?")) return
-    for (const team of defaultTeams) {
-      await setDoc(doc(db, 'teams', team.id), team)
-    }
+  //   if(!confirm("Reset game?")) return
+  //   for (const team of defaultTeams) {
+  //     await setDoc(doc(db, 'teams', team.id), team)
+  //   }
 
-    await setDoc(doc(db, "game", "current"), {
-      round: 1
-    })
+  //   await setDoc(doc(db, "game", "current"), {
+  //     round: 1
+  //   })
 
-    alert('Teams initialized!')
-  }
+  //   alert('Teams initialized!')
+  // }
 
-  async function updateValue(teamId, field, amount) {
-    const teamRef = doc(db, 'teams', teamId)
+  // async function updateValue(teamId, field, amount) {
+  //   const teamRef = doc(db, 'teams', teamId)
 
-    await updateDoc(teamRef, {
-      [field]: increment(amount)
-    })
+  //   await updateDoc(teamRef, {
+  //     [field]: increment(amount)
+  //   })
   }
 
   return (

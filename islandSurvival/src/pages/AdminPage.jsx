@@ -118,13 +118,14 @@ export default function AdminPage() {
 
   //   alert('Teams initialized!')
   // }
+  }
 
-  // async function updateValue(teamId, field, amount) {
-  //   const teamRef = doc(db, 'teams', teamId)
+  async function updateValue(teamId, field, amount) {
+    const teamRef = doc(db, 'teams', teamId)
 
-  //   await updateDoc(teamRef, {
-  //     [field]: increment(amount)
-  //   })
+    await updateDoc(teamRef, {
+      [field]: increment(amount)
+    })
   }
 
   return (

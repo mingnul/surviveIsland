@@ -234,30 +234,35 @@ export default function AdminPage() {
                 label={`Score (${team.score})`}
                 onAdd={() => updateValue(team.id, 'score', 1)}
                 onSubtract={() => updateValue(team.id, 'score', -1)}
+                onAddAmount={n => updateValue(team.id, 'score', n)}
               />
 
               <ControlRow
                 label={`Food (${team.food})`}
                 onAdd={() => updateValue(team.id, 'food', 1)}
                 onSubtract={() => updateValue(team.id, 'food', -1)}
+                onAddAmount={n => updateValue(team.id, 'food', n)}
               />
 
               <ControlRow
                 label={`Water (${team.water})`}
                 onAdd={() => updateValue(team.id, 'water', 1)}
                 onSubtract={() => updateValue(team.id, 'water', -1)}
+                onAddAmount={n => updateValue(team.id, 'water', n)}
               />
 
               <ControlRow
                 label={`People (${team.people})`}
                 onAdd={() => updateValue(team.id, 'people', 1)}
                 onSubtract={() => updateValue(team.id, 'people', -1)}
+                onAddAmount={n => updateValue(team.id, 'people', n)}
               />
 
               <ControlRow
                 label={`Cardboard (${team.cardboard})`}
                 onAdd={() => updateValue(team.id, 'cardboard', 1)}
                 onSubtract={() => updateValue(team.id, 'cardboard', -1)}
+                onAddAmount={n => updateValue(team.id, 'cardboard', n)}
               />
             </div>
           </div>
@@ -267,7 +272,19 @@ export default function AdminPage() {
   )
 }
 
-function ControlRow({ label, onAdd, onSubtract }) {
+function ControlRow({ label, onAdd, onSubtract, onAddAmount }) {
+  const [qty, setQty] = useState('')
+
+  const amount = Number(qty)
+  const canAdd = qty.trim() !== '' && Number.isFinite(amount) && amount !== 0
+
+  // Only applied when Add is pressed (or Enter) - never while typing.
+  function commitAmount() {
+    if (!canAdd) return
+    onAddAmount(amount)
+    setQty('')
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -280,6 +297,45 @@ function ControlRow({ label, onAdd, onSubtract }) {
       }}>
         {label}
       </div>
+
+      <input
+        type="number"
+        value={qty}
+        onChange={event => setQty(event.target.value)}
+        onKeyDown={event => {
+          if (event.key === 'Enter') commitAmount()
+        }}
+        placeholder="qty"
+        style={{
+          width: '84px',
+          height: '42px',
+          boxSizing: 'border-box',
+          padding: '0 10px',
+          borderRadius: '8px',
+          border: '1px solid #374151',
+          background: '#111827',
+          color: 'white',
+          fontSize: '18px',
+          textAlign: 'center'
+        }}
+      />
+
+      <button
+        onClick={commitAmount}
+        disabled={!canAdd}
+        style={{
+          height: '42px',
+          padding: '0 18px',
+          borderRadius: '8px',
+          border: 'none',
+          cursor: canAdd ? 'pointer' : 'not-allowed',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          opacity: canAdd ? 1 : 0.5
+        }}
+      >
+        Add
+      </button>
 
       <button
         onClick={onSubtract}

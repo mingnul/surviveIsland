@@ -9,6 +9,7 @@ import {
   deleteDoc
 } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import defaultTeams from '../data/defaultTeams'
 import { db } from '../firebase'
 
@@ -140,9 +141,25 @@ export default function AdminPage() {
         alignItems: 'center',
         marginBottom: '24px'
       }}>
-        <h1 style={{ fontSize: '42px' }}>
-          Admin Panel
-        </h1>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px' }}>
+          <h1 style={{ fontSize: '42px' }}>
+            Admin Panel
+          </h1>
+
+          <Link
+            to="/"
+            style={{
+              fontSize: '15px',
+              fontWeight: 'bold',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: '#9ca3af',
+              textDecoration: 'none'
+            }}
+          >
+            Leaderboard
+          </Link>
+        </div>
 
         <div style={{ display: 'flex', gap: '12px' }}>
         <button

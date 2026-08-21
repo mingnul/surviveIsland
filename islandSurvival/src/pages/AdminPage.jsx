@@ -131,9 +131,10 @@ export default function AdminPage() {
   return (
     <div style={{
       minHeight: '100vh',
+      boxSizing: 'border-box',
       background: '#111827',
       color: 'white',
-      padding: '24px',
+      padding: '100px',
       fontFamily: 'Arial'
     }}>
       <div style={{

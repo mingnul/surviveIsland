@@ -35,7 +35,7 @@ export default function AdminPage() {
   }
 
   async function endDay() {
-    if(!confirm("end day?")) return
+    if (!confirm('End the day? This applies food and water penalties to every team and advances the round.')) return
     const gameRef = doc(db, "game", "current")
 
     const currentRoundSnap = await getDoc(gameRef)
@@ -134,16 +134,18 @@ export default function AdminPage() {
       boxSizing: 'border-box',
       background: '#111827',
       color: 'white',
-      padding: '100px',
+      padding: 'clamp(16px, 8vw, 100px)',
       fontFamily: 'Arial'
     }}>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '16px',
         marginBottom: '24px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '16px' }}>
           <h1 style={{ fontSize: '42px' }}>
             Admin Panel
           </h1>
@@ -290,15 +292,23 @@ function ControlRow({ label, onAdd, onSubtract, onAddAmount }) {
     <div style={{
       display: 'flex',
       alignItems: 'center',
+      flexWrap: 'wrap',
       gap: '12px'
     }}>
       <div style={{
         width: '180px',
+        flexShrink: 0,
         fontSize: '18px'
       }}>
         {label}
       </div>
 
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        flexShrink: 0
+      }}>
       <input
         type="number"
         value={qty}
@@ -308,10 +318,10 @@ function ControlRow({ label, onAdd, onSubtract, onAddAmount }) {
         }}
         placeholder="qty"
         style={{
-          width: '84px',
+          width: '72px',
           height: '42px',
           boxSizing: 'border-box',
-          padding: '0 10px',
+          padding: '0 8px',
           borderRadius: '8px',
           border: '1px solid #374151',
           background: '#111827',
@@ -326,7 +336,7 @@ function ControlRow({ label, onAdd, onSubtract, onAddAmount }) {
         disabled={!canAdd}
         style={{
           height: '42px',
-          padding: '0 18px',
+          padding: '0 14px',
           borderRadius: '8px',
           border: 'none',
           cursor: canAdd ? 'pointer' : 'not-allowed',
@@ -367,6 +377,7 @@ function ControlRow({ label, onAdd, onSubtract, onAddAmount }) {
       >
         +
       </button>
+      </div>
     </div>
   )
 }

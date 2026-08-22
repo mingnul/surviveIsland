@@ -13,8 +13,11 @@ import { Link } from 'react-router-dom'
 import defaultTeams from '../data/defaultTeams'
 import { db } from '../firebase'
 
+const END_DAY_PASSWORD = '2026'
+
 export default function AdminPage() {
   const [teams, setTeams] = useState([])
+  const [password, setPassword] = useState('')
 
   async function addTeam() {
     const id = crypto.randomUUID()
@@ -35,7 +38,10 @@ export default function AdminPage() {
   }
 
   async function endDay() {
-    if (!confirm('End the day? This applies food and water penalties to every team and advances the round.')) return
+    if (password !== END_DAY_PASSWORD) {
+      alert('Incorrect password.')
+      return
+    }
     const gameRef = doc(db, "game", "current")
 
     const currentRoundSnap = await getDoc(gameRef)
@@ -90,7 +96,8 @@ export default function AdminPage() {
       round: round + 1
     })
 
-    
+    // Require the password again for the next end of day.
+    setPassword('')
   }
 
   useEffect(() => {
@@ -166,6 +173,23 @@ export default function AdminPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '12px' }}>
+        <input
+          type="password"
+          value={password}
+          onChange={event => setPassword(event.target.value)}
+          placeholder="password"
+          style={{
+            width: '130px',
+            boxSizing: 'border-box',
+            padding: '0 12px',
+            borderRadius: '10px',
+            border: '1px solid #374151',
+            background: '#111827',
+            color: 'white',
+            fontSize: '16px'
+          }}
+        />
+
         <button
           onClick={endDay}
           style={{
